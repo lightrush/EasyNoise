@@ -25,6 +25,7 @@ import android.view.animation.ScaleAnimation
 import android.view.animation.TranslateAnimation
 import android.view.animation.Animation.AnimationListener
 import android.view.animation.AccelerateDecelerateInterpolator
+import androidx.core.view.WindowCompat
 import com.google.android.material.slider.Slider
 
 class MainActivity : AppCompatActivity(), PlayerService.Callbacks, Slider.OnChangeListener {
@@ -64,9 +65,12 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, Slider.OnChan
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
-        setSupportActionBar(findViewById(R.id.my_toolbar))
+        setSupportActionBar(findViewById(R.id.toolbar))
 
         showPermissionNoticeButton = findViewById(R.id.showPermissionNoticeButton) as ImageButton
         permissionNotice = findViewById(R.id.permissionNotice) as ConstraintLayout
@@ -294,7 +298,6 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, Slider.OnChan
         volumeBar.setValue(volume.toFloat());
     }
 
-    @SuppressLint("RestrictedApi")
     override fun onValueChange(slider: Slider, value: Float, fromUser: Boolean) {
         prefs.edit().putInt("volume", value.toInt()).apply()
         if (serviceIsBound) playerService.updateVolume()
